@@ -33,7 +33,7 @@ spec:
   type: LoadBalancer
   ports:
   - protocol: TCP
-    port: 4000
+    port: 8080
     targetPort: 3000
     nodePort: 31122
     name: https
