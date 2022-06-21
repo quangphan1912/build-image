@@ -36,3 +36,4 @@ spec:
     port: 4000
     targetPort: 3000
     nodePort: 31122
+    name: https
