@@ -1,9 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: java-deployment
-  labels:
-    app: nginx
+  name: nginx-deployment
 spec:
   replicas: 1
   selector:
@@ -14,26 +12,35 @@ spec:
       labels:
         app: nginx
     spec:
+      volumes:
+        - name: cert-volume
+          secret:
+             secretName: "secret-nginx-cert"
       containers:
-      - name: javaserver
+      - name: nginx
         image: quangphan1912/build-image:latest
+        imagePullPolicy: "Always"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
         ports:
-        - containerPort: 3000
-        
-        
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: "/certs"
+            name: cert-volume
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: java-service
+  name: nginx-service
 spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+    name: http
+    nodePort: 31122
   selector:
     app: nginx
-  type: LoadBalancer
-  ports:
-  - protocol: TCP
-    port: 8080
-    targetPort: 3000
-    nodePort: 31122
-    name: http
