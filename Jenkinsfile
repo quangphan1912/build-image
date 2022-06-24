@@ -12,6 +12,11 @@ pipeline {
         sh 'pwd'
       }
     }
+     stage('Build mvn') {
+      steps {
+        sh 'mvn compile package'
+      }
+    }
     stage('Build') {
       steps {
         sh 'docker build -t quangphan1912/build-image:latest .'
